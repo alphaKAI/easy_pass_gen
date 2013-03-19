@@ -1,21 +1,23 @@
-#include <stdio.h>
+ï»¿#include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
 
 #if __unix || __linux || __FreeBSD__ || __NetBSD__
-//–¢’è
+//æœªå®š
 #endif
- 
+
 #if _WIN32 || _WIN64
 #include <windows.h>
 int ccp(LPTSTR szData);
 #endif
 
+#define DEBUG 0
+
 /*
 GPL v3 LICENSE http://www.gnu.org/licenses/gpl.html
-Copyright (C) ƒ¿‰ü @alpha_kai_NET 2012-2013 alpha-kai-net.info
-ŠÈˆÕƒpƒXƒ[ƒhƒWƒFƒlƒŒ[ƒ^[
+Copyright (C) Î±æ”¹ @alpha_kai_NET 2012-2013 alpha-kai-net.info
+ç°¡æ˜“ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚¸ã‚§ãƒãƒ¬ãƒ¼ã‚¿ãƒ¼
 */
 
 int main(void){
@@ -24,46 +26,59 @@ int main(void){
 	int t;
 	int ss;
 	int rccp;
-	char str[100000]={0};
+	int s;
+	char *str;
 	//abcdefghijklmnopqrstuvexyz01234567_
 	char strset[38] = {'\0','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9','_'};
 	
 	t=0;
 	rccp=0;
-	
+	s=0;
 	srand((unsigned)time(NULL));
 
-	printf("”CˆÓ‚ÌŒ…”‚ÌƒpƒXƒ[ƒh‚ğ¶¬‚µ‚Ü‚·\n");
+	printf("ä»»æ„ã®æ¡æ•°ã®ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã—ã¾ã™\n");
 	printf("abcdefghijklmnopqrstuvexyz01234567_\n");
-	printf("ã‚Ì37‚±‚Ì•¶š‚ğ‘g‚İ‡‚í‚¹‚Ä•¶š—ñ(ƒpƒXƒ[ƒh)‚ğ¶¬‚µ‚Ü‚·\n\n");
-	printf("ƒpƒXƒ[ƒh‚ÌŒ…”‚ğƒZƒbƒg‚µ‚Ä‚­‚¾‚³‚¢\n>");
+	printf("ä¸Šã®37ã“ã®æ–‡å­—ã‚’çµ„ã¿åˆã‚ã›ã¦æ–‡å­—åˆ—(ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰)ã‚’ç”Ÿæˆã—ã¾ã™\n\n");
+	printf("ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®æ¡æ•°ã‚’ã‚»ãƒƒãƒˆã—ã¦ãã ã•ã„\n>");
 	scanf("%d",&i);
 
-	#pragma omp parallel
-	{
-		while(1){
-			str[t] = strset[rand()%37 + 1];
- 
-			t++;
-
-			if(t==i&&strlen(str)==i){
-				break;
-			}
-			else if(t==i&&strlen(str)!=i){
-				printf("error:–ŒÌ‚è‚Ü‚µ‚½EEEI—¹‚µ‚Ü‚·\nƒSƒƒ“‚ÈƒTƒC\n");
-
-				//return 2;
-				break;
-			}
-		}
+	str = (char *)calloc(sizeof(char)*i+1,sizeof(char));
+	if(str == NULL) {
+		printf("ã‚¨ãƒ©ãƒ¼:\nãƒ¡ãƒ¢ãƒªãŒç¢ºä¿ã§ãã¾ã›ã‚“ã§ã—ãŸ\n");
+		exit(1);
+	}
+	else{
+		//printf("ãƒ¡ãƒ¢ãƒªã®ç¢ºä¿ã«æˆåŠŸã—ã¾ã—ãŸ\n");
 	}
 	
-	printf("İ’è‚³‚ê‚½Œ…”:%d\n",i);
+	for(t=0;t<i;t++){
+		if(DEBUG==1){
+			printf("==================\n");
+			printf("t\t%d\n",t);
+			printf("str\t%s\n",str);
+			printf("s\t%d\n",s);
+			printf("------------------\n");
+		}
+		str[t] = strset[rand()%37 + 1];
+		
+		if(s==i&&strlen(str)==i){
+			break;
+		}
+		else if(s==i&&strlen(str)!=i){
+			printf("error:äº‹æ•…ã‚Šã¾ã—ãŸãƒ»ãƒ»ãƒ»çµ‚äº†ã—ã¾ã™\nã‚´ãƒ¡ãƒ³ãªã‚µã‚¤\n");
+			//return 2;
+			break;
+		}
+		s++;
+	}
+
+	
+	printf("è¨­å®šã•ã‚ŒãŸæ¡æ•°:%d\n",i);
 	printf("RESULT:\n%s\n",str); 
-	//b’èWin‚Ì‚İ‚É‘Î‰ •¶š—ñƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[
+	//æš«å®šWinã®ã¿ã«å¯¾å¿œ æ–‡å­—åˆ—ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼
 #if _WIN32 || _WIN64
-	printf("Œ»İ¶¬‚µ‚½ƒpƒXƒ[ƒh‚ğƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[‚µ‚Ü‚·‚©H\n");
-	printf("“ü—Í‚µ‚Ä‚­‚¾‚³‚¢(1:ƒRƒs[‚·‚é 2:ƒRƒs[‚µ‚È‚¢‚ÅI—¹)\n>");
+	printf("ç¾åœ¨ç”Ÿæˆã—ãŸãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼ã—ã¾ã™ã‹ï¼Ÿ\n");
+	printf("å…¥åŠ›ã—ã¦ãã ã•ã„(1:ã‚³ãƒ”ãƒ¼ã™ã‚‹ 2:ã‚³ãƒ”ãƒ¼ã—ãªã„ã§çµ‚äº†)\n>");
 	scanf("%d", &ss);
 	switch(ss){
 		case 1:
@@ -71,42 +86,42 @@ int main(void){
 			rccp=ccp(str);
 			
 			if(rccp!=0){
-					printf("¶¬‚µ‚½ƒpƒXƒ[ƒh‚ÌƒNƒŠƒbƒvƒ{[ƒh‚Ö‚ÌƒRƒs[‚É¸”s‚µ‚Ü‚µ‚½\n");
+				printf("ç”Ÿæˆã—ãŸãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã¸ã®ã‚³ãƒ”ãƒ¼ã«å¤±æ•—ã—ã¾ã—ãŸ\n");
 			}
 			else{
-				printf("³í‚ÉƒRƒs[‚µ‚Ü‚µ‚½\n");
+				printf("æ­£å¸¸ã«ã‚³ãƒ”ãƒ¼ã—ã¾ã—ãŸ\n");
 			}
 		
 		break;
 		
 		case 2:
-			printf("ƒNƒŠƒbƒvƒ{[ƒh‚Ö‚ÌƒRƒs[‚Ís‚í‚ê‚Ü‚¹‚ñ‚Å‚µ‚½\n");
+			printf("ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã¸ã®ã‚³ãƒ”ãƒ¼ã¯è¡Œã‚ã‚Œã¾ã›ã‚“ã§ã—ãŸ\n");
 		break;
 		
 		default:
-			printf("1/2ˆÈŠO‚Ì’l‚ª“ü—Í‚³‚ê‚Ü‚µ‚½\n");
-			printf("ƒNƒŠƒbƒvƒ{[ƒh‚Ö‚ÌƒRƒs[‚Ís‚í‚ê‚Ü‚¹‚ñ‚Å‚µ‚½\n");
+			printf("1/2ä»¥å¤–ã®å€¤ãŒå…¥åŠ›ã•ã‚Œã¾ã—ãŸ\n");
+			printf("ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã¸ã®ã‚³ãƒ”ãƒ¼ã¯è¡Œã‚ã‚Œã¾ã›ã‚“ã§ã—ãŸ\n");
 		break;
 	}
 #endif 
  	printf("DONE\n");
 
+	free(str);
 	return 0;
 }
 
-//Win—pƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[
+//Winç”¨ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼
 #if _WIN32 || _WIN64
-int ccp(LPTSTR szData)
-{
+int ccp(LPTSTR szData){
 	HGLOBAL hGlobal;
 	LPTSTR pMem;
  
-	hGlobal = GlobalAlloc(GHND, lstrlen( szData ) + 128 );
-	if(hGlobal==NULL) {
+	hGlobal = GlobalAlloc(GHND, lstrlen(szData)+128);
+	if(hGlobal==NULL){
 		return 2;
 	}
 	pMem = (LPTSTR)GlobalLock( hGlobal );
-	if(pMem==NULL) {
+	if(pMem==NULL){
 		GlobalFree(hGlobal);
 		return 3;
 	}
